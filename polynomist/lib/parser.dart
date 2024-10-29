@@ -1,44 +1,44 @@
 import 'package:polynomist/term.dart';
 
 List<Term> parse(String input) {
+  String i = input.replaceAll('-', '+-');
   List<Term> terms = [];
-  List<String> parts = input.split(RegExp('[+-]'));
+  List<String> parts = i.split('+');
   print(parts);
   for (String part in parts) {
     part = part.trim();
     if (part.isEmpty) continue; // skip empty strings
+    int coefficient = 0;
+    String variable = part.replaceAll(RegExp(r'[0-9-^*]'), '');
+    int power = 0;
 
-    int coefficient = 1;
-    if (input.startsWith('-') && parts.first == part) {
-      coefficient = -1;
-    } else if (part.startsWith('-')) {
-      coefficient = -1;
-      part = part.substring(1);
-    }
-    print(coefficient);
+    print("var=${variable}");
 
-    String variable;
-    int exponent;
-    List<String> subparts = part.split('*');
-    if (subparts.length == 1) {
-      // no variable, just a coefficient
-      coefficient *= int.parse(part);
-      variable = '';
-      exponent = 0;
-    } else {
-      coefficient *= int.parse(subparts[0]);
-      int index = subparts[1].indexOf('^');
-      if (index == -1) {
-        variable = subparts[1];
-        exponent = 1;
+    if (variable == '') {
+      coefficient = int.parse(part);
+      print('coeff=${coefficient}');
+    } //no variable, covers 0 ±C
+    else {
+      if (part.contains('*')) {
+        coefficient = int.parse(part.split('*')[0]);
+      } else if (part[0] == '-') {
+        coefficient = -1;
       } else {
-        variable = subparts[1].substring(0, index);
-        exponent = int.parse(subparts[1].substring(index + 1));
+        coefficient = 1;
       }
+      print('coeff=${coefficient}');
+      //variable and coeff, covers ±x ±C*x
+
+      if (part.contains('^')) {
+        power = int.parse(part.split('^')[1]);
+      } else {
+        power = 1;
+      }
+      print('pwr=${power}');
+      //variable and power, covers x^±C and by proxy ±x^±C ±C*x^±C
     }
-    Term t = Term(coefficient, variable, exponent);
+    Term t = Term(coefficient, variable, power);
     terms.add(t);
   }
-
   return terms;
 }
