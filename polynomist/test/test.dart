@@ -1,5 +1,6 @@
 import 'package:polynomist/parser.dart';
 import 'package:polynomist/term.dart';
+import 'package:polynomist/diff.dart';
 import 'package:test/test.dart';
 
 //x   x^2   x-2     4*x^3 4*x^3-x^2 ERROR
