@@ -13,6 +13,11 @@ class Term {
           coefficient == other.coefficient &&
           variable == other.variable &&
           exponent == other.exponent;
+  @override
+  String toString() {
+    String v = variable == '' ? 'C' : variable;
+    return '$coefficient; $v; $exponent';
+  }
 
   @override
   int get hashCode =>
